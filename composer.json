@@ -1,0 +1,19 @@
+{
+    "name": "burnbright/silverstripe-hasonefield",
+    "description": "Edit a has_one relationship using the gridfield editor, triggered by clicking a button.",
+    "license": "BSD-2",
+    "type": "silverstripe-module",
+    "authors": [
+        {
+            "name": "Jeremy Shipman",
+            "email": "jeremy@burnbright.net"
+        }
+    ],
+    "minimum-stability": "dev",
+    "require": {
+
+    },
+    "extra": {
+        "installer-name": "hasonefield"
+    }
+}
