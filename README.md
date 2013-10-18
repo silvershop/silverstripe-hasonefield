@@ -7,7 +7,7 @@ Very much a proof-of-concept at this stage. Feel free to take this and make it n
 
 ## How to use
 
-You must pass through the parent context, so that the has_one relationship can be set
+You must pass through the parent context ($this), so that the has_one relationship can be set
 by the `GridFieldDetailForm`.
 
 ```php
