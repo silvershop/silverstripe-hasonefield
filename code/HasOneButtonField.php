@@ -5,8 +5,8 @@ class HasOneButtonField extends GridField{
 	protected $record;
 	protected $parent;
 
-	function __construct($name, $title = null, $record, $parent){
-		$this->record = $record;
+	function __construct($name, $title, $parent) {
+		$this->record = $parent->{$name}();
 		$this->parent = $parent;
 		$config = GridFieldConfig::create()
 					->addComponent(new GridFieldDetailForm())
@@ -15,7 +15,7 @@ class HasOneButtonField extends GridField{
 		parent::__construct($name, $title, $list, $config);
 	}
 
-	function getRecord(){
+	function getRecord() {
 		return $this->record;
 	}
 
@@ -55,14 +55,14 @@ class HasOneButtonRelationList extends DataList{
 	protected $name;
 	protected $parent;
 
-	function __construct($record, $name, $parent){
+	function __construct($record, $name, $parent) {
 		$this->record = $record;
 		$this->name = $name;
 		$this->parent = $parent;
 		parent::__construct($record->ClassName);
 	}
 
-	function add($item){
+	function add($item) {
 		$this->parent->{$this->name."ID"} = $item->ID;
 		$this->parent->write();
 	}

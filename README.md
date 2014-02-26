@@ -4,12 +4,9 @@ Allows you to create a CMS button for creating and editing a single related obje
 
 ![demo](https://raw.github.com/wiki/burnbright/silverstripe-hasonefield/images/hasonefield.gif)
 
-## How to use
+## Usage
 
-You must pass through the parent context ($this), so that the has_one relationship can be set
-by the `GridFieldDetailForm`.
-
-In Warehouse.php
+In Warehouse.php context:
 ```php
 	public function getCMSFields() {
 		$fields = parent::getCMSFields();
@@ -20,12 +17,14 @@ In Warehouse.php
 		}
 		$fields->removeByName("AddressID");
 		$fields->addFieldToTab("Root.Main",
-			HasOneButtonField::create("Address", "Address", $this->Address(), $this)
+			HasOneButtonField::create("Address", "Address", $this) //here!
 		);
 
 		return $fields;
 	}
 ```
+
+You must pass through the parent context ($this), so that the has_one relationship can be set by the `GridFieldDetailForm`.
 
 ## Caveats
 
