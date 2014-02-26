@@ -1,21 +1,32 @@
-# Has one field
+# SilverStripe has_one field
 
-Allows you to create a CMS button for creating and editing a single related object.
-It is a grid field, but just looks like a button.
+Allows you to create a CMS button for creating and editing a single related object. It is actually a grid field, but just looks like a button.
 
-Very much a proof-of-concept at this stage. Feel free to take this and make it nice :smirk:
+![demo](https://raw.github.com/wiki/burnbright/silverstripe-hasonefield/images/hasonefield.gif)
 
 ## How to use
 
 You must pass through the parent context ($this), so that the has_one relationship can be set
 by the `GridFieldDetailForm`.
 
+In Warehouse.php
 ```php
-	function getCMSFields(){
+	public function getCMSFields() {
 		$fields = parent::getCMSFields();
-		$fields->merge(new FieldList(
-			HasOneButtonField::create("Likebox", "Likebox", $this->Likebox(), $this)
-		));
+		if($this->Address()->exists()){
+			$fields->addFieldsToTab("Root.Main", array(
+				ReadonlyField::create("add", "Address", $this->Address()->toString())
+			));
+		}
+		$fields->removeByName("AddressID");
+		$fields->addFieldToTab("Root.Main",
+			HasOneButtonField::create("Address", "Address", $this->Address(), $this)
+		);
+
 		return $fields;
 	}
 ```
+
+## Caveats
+
+The field name must match the has_one relationship name.
