@@ -63,8 +63,12 @@ class HasOneButtonRelationList extends DataList{
 	}
 
 	function add($item) {
+		// Set parent > child relationship
 		$this->parent->{$this->name."ID"} = $item->ID;
 		$this->parent->write();
+		
+		// Set child > parent relationship
+		$item->{$this->parent->ClassName."ID"} = $this->parent->ID;
+		$item->write();
 	}
-
 }
