@@ -1,13 +1,13 @@
 <?php
 
+use SilverStripe\Control\Controller;
 use SilverStripe\Forms\GridField\GridField;
+use SilverStripe\Forms\GridField\GridFieldAddNewButton;
 use SilverStripe\Forms\GridField\GridFieldConfig;
 use SilverStripe\Forms\GridField\GridFieldDetailForm;
-use SilverStripe\Forms\GridField\GridFieldAddNewButton;
 use SilverStripe\Forms\GridField\GridField_HTMLProvider;
-use SilverStripe\Control\Controller;
-use SilverStripe\View\ArrayData;
 use SilverStripe\ORM\DataList;
+use SilverStripe\View\ArrayData;
 
 class HasOneButtonField extends GridField
 {
