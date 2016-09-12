@@ -56,7 +56,7 @@ class GridFieldHasOneEditButton extends GridFieldAddNewButton implements GridFie
         ));
 
         return array(
-            $this->targetFragment => $data->renderWith('GridFieldAddNewbutton')
+            $this->targetFragment => $data->renderWith('SilverStripe\Forms\GridField\GridFieldAddNewButton')
         );
     }
 }
