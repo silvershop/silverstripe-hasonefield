@@ -1,5 +1,14 @@
 <?php
 
+use SilverStripe\Control\Controller;
+use SilverStripe\Forms\GridField\GridField;
+use SilverStripe\Forms\GridField\GridFieldAddNewButton;
+use SilverStripe\Forms\GridField\GridFieldConfig;
+use SilverStripe\Forms\GridField\GridFieldDetailForm;
+use SilverStripe\Forms\GridField\GridField_HTMLProvider;
+use SilverStripe\ORM\DataList;
+use SilverStripe\View\ArrayData;
+
 class HasOneButtonField extends GridField
 {
 
@@ -47,7 +56,7 @@ class GridFieldHasOneEditButton extends GridFieldAddNewButton implements GridFie
         ));
 
         return array(
-            $this->targetFragment => $data->renderWith('GridFieldAddNewbutton')
+            $this->targetFragment => $data->renderWith('SilverStripe\\Forms\\GridField\\GridFieldAddNewButton')
         );
     }
 }
