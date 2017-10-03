@@ -1,5 +1,5 @@
 {
-    "name": "burnbright/silverstripe-hasonefield",
+    "name": "silvershop/silverstripe-hasonefield",
     "description": "Edit a has_one relationship using the gridfield editor, triggered by clicking a button.",
     "license": "BSD-2",
     "type": "silverstripe-module",
