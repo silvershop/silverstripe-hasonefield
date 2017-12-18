@@ -2,7 +2,11 @@
     "name": "silvershop/silverstripe-hasonefield",
     "description": "Edit a has_one relationship using the gridfield editor, triggered by clicking a button.",
     "license": "BSD-2",
-    "type": "silverstripe-module",
+    "type": "silverstripe-vendormodule",
+    "require": {
+        "silverstripe/vendor-plugin": "^1.0",
+        "silverstripe/framework": "^4.0",
+    },
     "authors": [
         {
             "name": "Jeremy Shipman",
