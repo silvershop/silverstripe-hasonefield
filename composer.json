@@ -9,11 +9,13 @@
             "email": "jeremy@burnbright.net"
         }
     ],
-    "minimum-stability": "dev",
-    "require": {
-
+    "autoload": {
+        "psr-0": {
+            "silvershop\\SilverStripe\\hasonefield\\": "src/"
+        }
     },
     "extra": {
         "installer-name": "hasonefield"
-    }
+    },
+    "minimum-stability": "dev"
 }
