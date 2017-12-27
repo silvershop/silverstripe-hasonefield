@@ -8,6 +8,8 @@ Allows you to create a CMS button for creating and editing a single related obje
 
 In Warehouse.php context:
 ```php
+    use Silvershop\HasOneField\HasOneButtonField;
+
 	public function getCMSFields() {
 		$fields = parent::getCMSFields();
 		if($this->Address()->exists()){

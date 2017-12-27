@@ -1,5 +1,7 @@
 <?php
 
+namespace Silvershop\HasOneField;
+
 use SilverStripe\Control\Controller;
 use SilverStripe\Forms\GridField\GridField;
 use SilverStripe\Forms\GridField\GridFieldAddNewButton;
