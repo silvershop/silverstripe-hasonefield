@@ -14,12 +14,15 @@
         }
     ],
     "autoload": {
-        "psr-0": {
-            "silvershop\\SilverStripe\\hasonefield\\": "src/"
+        "psr-4": {
+            "SilverShop\\HasOneField": "src/"
         }
     },
     "extra": {
-        "installer-name": "hasonefield"
+        "branch-alias": {
+            "dev-master": "2.x-dev"
+        }
     },
-    "minimum-stability": "dev"
+    "minimum-stability": "dev",
+    "prefer-stable": true
 }
