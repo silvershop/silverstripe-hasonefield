@@ -30,8 +30,8 @@ class GridFieldHasOneEditButton extends GridFieldAddNewButton implements GridFie
         }
         $data = ArrayData::create(
             array(
-            'NewLink' => Controller::join_links($gridField->Link('item'), $record->ID, 'edit'),
-            'ButtonName' => $this->buttonName,
+                'NewLink' => Controller::join_links($gridField->Link('item'), $record->ID, 'edit'),
+                'ButtonName' => $this->buttonName,
             )
         );
 
