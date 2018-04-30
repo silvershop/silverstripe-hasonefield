@@ -16,6 +16,36 @@ class GridFieldSummaryField implements GridField_HTMLProvider
 {
 
     /**
+     * The name of the relation
+     *
+     * @var string 
+     */
+    protected $name;
+
+    /**
+     * Get the value of name
+     *
+     * @return string
+     */ 
+    public function getName()
+    {
+        return $this->name;
+    }
+
+    /**
+     * Set the value of name
+     *
+     * @param string $name the relation name
+     *
+     * @return self
+     */ 
+    public function setName(string $name)
+    {
+        $this->name = $name;
+        return $this;
+    }
+
+    /**
      * The location of this fragmemt
      * 
      * @var string
@@ -74,11 +104,13 @@ class GridFieldSummaryField implements GridField_HTMLProvider
     /**
      * Setup this component
      *
-     * @param string $targetFragment The location of this fragment
+     * @param string $name           The name of the relation
      * @param string $summaryField   The field on the record to use for the summary 
+     * @param string $targetFragment The location of this fragment
      */
-    public function __construct($targetFragment = 'before', $summaryField = "Title")
+    public function __construct($name, $summaryField = "Title", $targetFragment = 'before')
     {
+        $this->name = $name;
         $this->targetFragment = $targetFragment;
         $this->summaryField = $summaryField;
     }
@@ -94,16 +126,17 @@ class GridFieldSummaryField implements GridField_HTMLProvider
     {
         $record = $gridField->getRecord();
         $summary = $this->summaryField;
+        $name = $this->name;
 
         $field = ReadonlyField::create(
             'gridfield_hasone_summary',
-            $record->i18n_singular_name()
+            $name
         );
         
         $field->setValue($record->{$summary});
 
-        return array(
-            $this->targetFragment => $field->Field()
-        );
+        return [
+            $this->targetFragment => $field->FieldHolder()
+        ];
     }
 }
