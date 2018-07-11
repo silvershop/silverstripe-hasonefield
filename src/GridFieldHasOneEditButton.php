@@ -3,6 +3,7 @@
 namespace SilverShop\HasOneField;
 
 use SilverStripe\Control\Controller;
+use SilverStripe\Forms\GridField\GridField;
 use SilverStripe\Forms\GridField\GridField_HTMLProvider;
 use SilverStripe\Forms\GridField\GridFieldAddNewButton;
 use SilverStripe\View\ArrayData;
@@ -26,7 +27,7 @@ class GridFieldHasOneEditButton extends GridFieldAddNewButton implements GridFie
         if (!$this->buttonName) {
             // provide a default button name, can be changed by calling {@link setButtonName()} on this component
             $objectName = $singleton->i18n_singular_name();
-            $this->buttonName = _t('GridField.Edit', 'Edit {name}', array('name' => $objectName));
+            $this->buttonName = _t(GridField::class . '.Edit', 'Edit {name}', array('name' => $objectName));
         }
         $data = ArrayData::create(
             array(
