@@ -7,6 +7,7 @@ use SilverStripe\Forms\GridField\GridField;
 use SilverStripe\Forms\GridField\GridField_HTMLProvider;
 use SilverStripe\Forms\GridField\GridFieldAddNewButton;
 use SilverStripe\View\ArrayData;
+use SilverStripe\View\SSViewer;
 
 /**
  * Class GridFieldHasOneEditButton
@@ -41,7 +42,7 @@ class GridFieldHasOneEditButton extends GridFieldAddNewButton implements GridFie
         );
 
         return array(
-            $this->targetFragment => $data->renderWith(GridFieldAddNewButton::class)
+            $this->targetFragment => $data->renderWith(SSViewer::get_templates_by_class(static::class))
         );
     }
 }
