@@ -18,18 +18,19 @@ class HasOneButtonField extends GridField
     /**
      * HasOneButtonField constructor.
      * @param \SilverStripe\ORM\DataObject $parent
-     * @param string $name
+     * @param string $relationName
+     * @param string|null $fieldName
      * @param string|null $title
      */
-    public function __construct(DataObject $parent, $name, $title = null)
+    public function __construct(DataObject $parent, $relationName, $fieldName = null, $title = null)
     {
-        $this->record = $parent->{$name}();
+        $this->record = $parent->{$relationName}();
         $this->parent = $parent;
         $config = GridFieldConfig::create()
                     ->addComponent(new GridFieldDetailForm())
                     ->addComponent(new GridFieldHasOneEditButton());
-        $list = new HasOneButtonRelationList($this->record, $name, $parent);
-        parent::__construct($name, $title, $list, $config);
+        $list = new HasOneButtonRelationList($this->record, $relationName, $parent);
+        parent::__construct($fieldName ?: $relationName, $title, $list, $config);
     }
 
     /**
