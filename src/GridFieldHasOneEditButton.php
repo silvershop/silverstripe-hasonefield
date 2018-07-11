@@ -14,6 +14,10 @@ use SilverStripe\View\ArrayData;
 class GridFieldHasOneEditButton extends GridFieldAddNewButton implements GridField_HTMLProvider
 {
 
+    /**
+     * @param \SilverShop\HasOneField\HasOneButtonField $gridField
+     * @return array
+     */
     public function getHTMLFragments($gridField)
     {
         $record = $gridField->getRecord();

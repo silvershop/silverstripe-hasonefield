@@ -11,7 +11,6 @@ use SilverStripe\Forms\GridField\GridFieldDetailForm;
  */
 class HasOneButtonField extends GridField
 {
-
     protected $record;
     protected $parent;
 
@@ -26,6 +25,9 @@ class HasOneButtonField extends GridField
         parent::__construct($name, $title, $list, $config);
     }
 
+    /**
+     * @return \SilverStripe\ORM\DataObject
+     */
     public function getRecord()
     {
         return $this->record;
