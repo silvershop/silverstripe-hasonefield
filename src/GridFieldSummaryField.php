@@ -6,6 +6,7 @@ use SilverStripe\Core\Convert;
 use SilverStripe\Forms\GridField\GridField;
 use SilverStripe\Forms\GridField\GridField_HTMLProvider;
 use SilverStripe\Forms\ReadonlyField;
+use SilverStripe\View\Requirements;
 
 /**
  * Class GridFieldSummaryField
@@ -119,10 +120,18 @@ class GridFieldSummaryField implements GridField_HTMLProvider
     {
         $record = $gridField->getRecord();
 
+        Requirements::customCSS(<<<EOT
+.hasonebutton .gridfield-summary-field { padding-bottom: 0; }
+.hasonebutton .gridfield-summary-field:after { border: none; }
+EOT
+            , 'hasonefield-gridfield-summary-field');
+
         $field = ReadonlyField::create(
             $gridField->getName() . '_' . Convert::raw2htmlid(static::class),
             ReadonlyField::name_to_label($this->relationName)
-        )->setValue($record->getField($this->summaryField));
+        )
+            ->setValue($record->getField($this->summaryField))
+            ->addExtraClass('gridfield-summary-field');
 
         return [
             $this->targetFragment => $field->FieldHolder(),
