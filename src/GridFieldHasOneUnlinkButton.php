@@ -2,15 +2,13 @@
 
 namespace SilverShop\HasOneField;
 
-use SilverStripe\View\ArrayData;
 use SilverStripe\Control\Controller;
-use SilverStripe\ORM\ValidationException;
 use SilverStripe\Forms\GridField\GridField;
-use SilverStripe\Forms\GridField\GridField_FormAction;
-use SilverStripe\Forms\GridField\GridFieldAddNewButton;
-use SilverStripe\Forms\GridField\GridField_HTMLProvider;
 use SilverStripe\Forms\GridField\GridField_ActionProvider;
-use SilverStripe\Forms\GridField\GridField_URLHandler;
+use SilverStripe\Forms\GridField\GridField_FormAction;
+use SilverStripe\Forms\GridField\GridField_HTMLProvider;
+use SilverStripe\ORM\DataObject;
+use SilverStripe\ORM\ValidationException;
 
 /**
  * Class GridFieldHasOneEditButton
@@ -23,8 +21,25 @@ class GridFieldHasOneUnlinkButton implements GridField_HTMLProvider, GridField_A
     protected $targetFragment;
 
     /**
+     * The parent record to unlink the current record from
+     * @var DataObject
+     */
+    protected $parent;
+
+    /**
+     * GridFieldHasOneUnlinkButton constructor.
+     * @param DataObject $parent
+     * @param string $targetFragment
+     */
+    public function __construct(DataObject $parent, $targetFragment = "before")
+    {
+        $this->parent = $parent;
+        $this->targetFragment = $targetFragment;
+    }
+
+    /**
      * Get fragment to write the button to
-     */ 
+     */
     public function getTargetFragment()
     {
         return $this->targetFragment;
@@ -33,8 +48,9 @@ class GridFieldHasOneUnlinkButton implements GridField_HTMLProvider, GridField_A
     /**
      * Set fragment to write the button to
      *
-     * @return self
-     */ 
+     * @param string $targetFragment
+     * @return static
+     */
     public function setTargetFragment($targetFragment)
     {
         $this->targetFragment = $targetFragment;
@@ -42,17 +58,9 @@ class GridFieldHasOneUnlinkButton implements GridField_HTMLProvider, GridField_A
     }
 
     /**
-     * The parent record to unlink the current record from
-     * 
-     * @var DataObject
-     */
-    protected $parent;
-
-    /**
      * Get the parent record to unlink the current record from
-     *
      * @return DataObject
-     */ 
+     */
     public function getParent()
     {
         return $this->parent;
@@ -62,23 +70,15 @@ class GridFieldHasOneUnlinkButton implements GridField_HTMLProvider, GridField_A
      * Set the parent record to unlink the current record from
      *
      * @param DataObject $parent The parent record to unlink the current record from
-     *
-     * @return self
-     */ 
+     * @return static
+     */
     public function setParent(DataObject $parent)
     {
         $this->parent = $parent;
         return $this;
     }
 
-    public function __construct($parent, $targetFragment = "before")
-    {
-        $this->parent = $parent;
-        $this->targetFragment = $targetFragment;
-    }
-
     /**
-     *
      * @param GridField $gridField
      * @return array
      */
@@ -90,61 +90,59 @@ class GridFieldHasOneUnlinkButton implements GridField_HTMLProvider, GridField_A
     /**
      * Manipulate the state to add a new relation
      *
-     * @param GridField $gridField
+     * @param GridField|HasOneButtonField $gridField
      * @param string $actionName Action identifier, see {@link getActions()}.
      * @param array $arguments Arguments relevant for this
      * @param array $data All form data
+     * @throws ValidationException
      */
     public function handleAction(GridField $gridField, $actionName, $arguments, $data)
     {
-        if ($actionName == 'unlinkrelation') {
-            $parent = $this->parent;
-            $record = $gridField->getRecord();
+        if ($actionName !== 'unlinkrelation') return;
 
-            if (!$record || $record && !$record->exists()) {
-                return;
-            }
-            
-            $item = $gridField->getList()->byID($record->ID);
-    
-            if (!$item) {
-                return;
-            }
-    
-            if (!$item->canEdit()) {
-                throw new ValidationException(
-                    _t(__CLASS__ . '.EditPermissionsFailure', "No permission to unlink record")
-                );
-            }
-    
-            $gridField->getList()->remove($item);
+        $record = $gridField->getRecord();
+        if (!$record || !$record->exists()) return;
 
-            $response = Controller::curr()->getResponse();
-            $response->setStatusCode(
-                200,
-                _t(__CLASS__ . '.Unlinked', "Unlinked")
+        /** @var DataObject|null $item */
+        $item = $gridField->getList()->byID($record->ID);
+        if ($item === null) return;
+
+        if (!$item->canEdit()) {
+            throw new ValidationException(
+                _t(__CLASS__ . '.EditPermissionsFailure', "No permission to unlink record")
             );
         }
+
+        $gridField->getList()->remove($item);
+
+        Controller::curr()->getResponse()->setStatusCode(
+            200,
+            _t(__CLASS__ . '.Unlinked', "Unlinked")
+        );
     }
 
+    /**
+     * @param GridField|HasOneButtonField $gridField
+     * @return array
+     */
     public function getHTMLFragments($gridField)
     {
         $record = $gridField->getRecord();
+        if (!$record || !$record->exists()) return [];
 
-        if ($record->exists()) {
-            $field = new GridField_FormAction(
-                $gridField,
-                'gridfield_unlinkrelation',
-                _t(__CLASS__ . '.Unlink', "Unlink"),
-                'unlinkrelation',
-                'unlinkrelation'
-            );
-            $field->setAttribute('data-icon', 'chain--plus');
-            $field->addExtraClass('btn btn-outline-secondary font-icon-link-broken action_gridfield_unlinkrelation');
+        $field = new GridField_FormAction(
+            $gridField,
+            'gridfield_unlinkrelation',
+            _t(__CLASS__ . '.Unlink', "Unlink"),
+            'unlinkrelation',
+            'unlinkrelation'
+        );
 
-            return array(
-                $this->targetFragment => $field->Field()
-            );
-        }
+        $field->setAttribute('data-icon', 'chain--plus')
+            ->addExtraClass('btn btn-outline-secondary font-icon-link-broken action_gridfield_unlinkrelation');
+
+        return [
+            $this->targetFragment => $field->Field(),
+        ];
     }
 }
