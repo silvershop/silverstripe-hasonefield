@@ -1,5 +1,5 @@
 {
-    "name": "silvershop/silverstripe-hasonefield",
+    "name": "hchokshi/silverstripe-hasonefield",
     "description": "Edit a has_one relationship using the gridfield editor, triggered by clicking a button.",
     "license": "BSD-2-Clause",
     "type": "silverstripe-vendormodule",
@@ -24,5 +24,8 @@
         }
     },
     "minimum-stability": "dev",
-    "prefer-stable": true
+    "prefer-stable": true,
+    "replace": {
+        "silvershop/silverstripe-hasonefield": "*"
+    }
 }
