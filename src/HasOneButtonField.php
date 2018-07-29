@@ -5,6 +5,7 @@ namespace SilverShop\HasOneField;
 use SilverStripe\Forms\GridField\GridField;
 use SilverStripe\Forms\GridField\GridFieldConfig;
 use SilverStripe\Forms\GridField\GridFieldDetailForm;
+use SilverStripe\Forms\GridField\GridFieldAddExistingAutocompleter;
 use SilverStripe\ORM\DataObject;
 
 /**
@@ -27,8 +28,11 @@ class HasOneButtonField extends GridField
         $this->record = $parent->{$relationName}();
         $this->parent = $parent;
         $config = GridFieldConfig::create()
+                    ->addComponent(new GridFieldSummaryField($relationName))
                     ->addComponent(new GridFieldDetailForm())
-                    ->addComponent(new GridFieldHasOneEditButton());
+                    ->addComponent(new GridFieldHasOneEditButton())
+                    ->addComponent(new GridFieldHasOneUnlinkButton($parent));
+
         $list = new HasOneButtonRelationList($this->record, $relationName, $parent);
 
         parent::__construct($fieldName ?: $relationName, $title, $list, $config);

@@ -26,4 +26,10 @@ class HasOneButtonRelationList extends DataList
         $this->parent->{$this->name."ID"} = $item->ID;
         $this->parent->write();
     }
+
+    public function remove($item)
+    {
+        $this->parent->{$this->name."ID"} = 0;
+        $this->parent->write();
+    }
 }
