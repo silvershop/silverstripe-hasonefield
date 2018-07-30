@@ -25,24 +25,29 @@ class GridFieldHasOneEditButton extends GridFieldAddNewButton implements GridFie
         if (!$record->exists() || !$record->isInDB()) {
             return parent::getHTMLFragments($gridField); //use parent add button
         }
+
         $singleton = singleton($gridField->getModelClass());
-        if (!$singleton->canCreate()) {
-            return array();
-        }
+        if (!$singleton->canCreate()) return [];
+
         if (!$this->buttonName) {
             // provide a default button name, can be changed by calling {@link setButtonName()} on this component
             $objectName = $singleton->i18n_singular_name();
-            $this->buttonName = _t(GridField::class . '.Edit', 'Edit {name}', array('name' => $objectName));
+            $buttonName = $gridField->getRecord()->exists()
+                ? _t(GridField::class . '.Edit', 'Edit {name}', ['name' => $objectName])
+                : _t(GridField::class . '.Add', 'Add {name}', ['name' => $objectName]);
+
+            $this->setButtonName($buttonName);
         }
+
         $data = ArrayData::create(
-            array(
-                'NewLink' => Controller::join_links($gridField->Link('item'), $record->ID, 'edit'),
+            [
+                'NewLink'    => Controller::join_links($gridField->Link('item'), $record->ID, 'edit'),
                 'ButtonName' => $this->buttonName,
-            )
+            ]
         );
 
-        return array(
-            $this->targetFragment => $data->renderWith(SSViewer::get_templates_by_class(static::class))
-        );
+        return [
+            $this->targetFragment => $data->renderWith(SSViewer::get_templates_by_class(static::class)),
+        ];
     }
 }

@@ -113,6 +113,7 @@ class GridFieldHasOneUnlinkButton implements GridField_HTMLProvider, GridField_A
             );
         }
 
+        $gridField->setRecord(null);
         $gridField->getList()->remove($item);
 
         Controller::curr()->getResponse()->setStatusCode(

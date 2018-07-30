@@ -35,16 +35,6 @@ class HasOneButtonField extends GridField
         $list = new HasOneButtonRelationList($this->record, $relationName, $parent);
 
         parent::__construct($fieldName ?: $relationName, $title, $list, $config);
-
-        if ($title !== null) {
-            $buttonName = $this->getRecord()->exists()
-                ? _t(GridField::class . '.Edit', 'Edit {name}', ['name' => $title])
-                : _t(GridField::class . '.Add', 'Add {name}', ['name' => $title]);
-
-            /** @var \SilverShop\HasOneField\GridFieldHasOneEditButton $editButton */
-            $editButton = $this->getConfig()->getComponentByType(GridFieldHasOneEditButton::class);
-            $editButton->setButtonName($buttonName);
-        }
     }
 
     /**
@@ -53,5 +43,13 @@ class HasOneButtonField extends GridField
     public function getRecord()
     {
         return $this->record;
+    }
+
+    /**
+     * @param DataObject|null $record
+     */
+    public function setRecord($record): void
+    {
+        $this->record = $record ?: singleton(get_class($this->record));
     }
 }
