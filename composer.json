@@ -22,11 +22,9 @@
         "branch-alias": {
             "dev-master": "3.x-dev"
         },
-        "extra": {
-            "expose": [
-                "client"
-            ]
-        }
+        "expose": [
+            "client"
+        ]
     },
     "minimum-stability": "dev",
     "prefer-stable": true,
