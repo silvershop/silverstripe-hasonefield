@@ -9,6 +9,7 @@ use SilverStripe\Forms\GridField\GridFieldAddNewButton;
 use SilverStripe\View\ArrayData;
 use SilverStripe\View\SSViewer;
 use SilverStripe\Forms\GridField\GridFieldAddExistingAutocompleter;
+use SilverStripe\ORM\DataObject;
 
 /**
  * Class GridFieldHasOneEditButton
@@ -44,6 +45,27 @@ class HasOneAddExistingAutoCompleter extends GridFieldAddExistingAutocompleter
     public function handleAction(GridField $gridField, $actionName, $arguments, $data)
     {
         if ($actionName == 'addto' && isset($data['relationID']) && $data['relationID']) {
+            $parent = $gridField->getParent();
+            $relation = $gridField->getRelation() . "ID";
+            $item = DataObject::get($gridField->getModelClass())
+                ->byID($data['relationID']);
+
+            if (empty($parent)) {
+                throw new ValidationException(
+                    _t(__CLASS__ . '.ParentNotFound', "Parent record not found")
+                );
+            }
+
+            if (empty($item)) {
+                throw new ValidationException(
+                    _t(__CLASS__ . '.ItemNotFound', "Related record not found")
+                );
+            }
+
+            // Save this relation to the DB
+            $parent->{$relation} = $data['relationID'];
+            $parent->write();
+
             $gridField->State->GridFieldAddRelation = $data['relationID'];
 
             return Controller::curr()->getResponse()->setStatusCode(
