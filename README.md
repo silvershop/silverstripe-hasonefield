@@ -19,7 +19,8 @@ In Warehouse.php context:
 		}
 		$fields->removeByName("AddressID");
 		$fields->addFieldToTab("Root.Main",
-			HasOneButtonField::create("Address", "Address", $this) //here!
+            // $dataObject, 'RelationName', 'Optional title - would default to Relation Name'
+			HasOneButtonField::create($this, "Address") //here!
 		);
 
 		return $fields;
