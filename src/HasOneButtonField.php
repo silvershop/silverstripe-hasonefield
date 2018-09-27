@@ -32,7 +32,7 @@ class HasOneButtonField extends GridField
             ->addComponent(new GridFieldHasOneEditButton())
             ->addComponent(new GridFieldHasOneUnlinkButton($parent));
 
-        $list = new HasOneButtonRelationList($this->record, $relationName, $parent);
+        $list = HasOneButtonRelationList::create($parent, $this->record, $relationName);
 
         parent::__construct($fieldName ?: $relationName, $title, $list, $config);
     }
