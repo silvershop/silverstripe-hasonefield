@@ -48,7 +48,7 @@ class HasOneButtonField extends GridField
     /**
      * @param DataObject|null $record
      */
-    public function setRecord($record): void
+    public function setRecord($record)
     {
         $this->record = $record ?: singleton(get_class($this->record));
     }
