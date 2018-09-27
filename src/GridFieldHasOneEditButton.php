@@ -22,6 +22,7 @@ class GridFieldHasOneEditButton extends GridFieldAddNewButton implements GridFie
     public function getHTMLFragments($gridField)
     {
         $record = $gridField->getRecord();
+
         if (!$record->exists() || !$record->isInDB()) {
             return parent::getHTMLFragments($gridField); //use parent add button
         }
@@ -32,9 +33,12 @@ class GridFieldHasOneEditButton extends GridFieldAddNewButton implements GridFie
         if (!$this->buttonName) {
             // provide a default button name, can be changed by calling {@link setButtonName()} on this component
             $objectName = $singleton->i18n_singular_name();
-            $buttonName = $gridField->getRecord()->exists()
-                ? _t(GridField::class . '.Edit', 'Edit {name}', ['name' => $objectName])
-                : _t(GridField::class . '.Add', 'Add {name}', ['name' => $objectName]);
+
+            if ($record->exists()) {
+                $buttonName = _t(GridField::class . '.Edit', 'Edit {name}', ['name' => $objectName]);
+            } else {
+                $buttonName = _t(GridField::class . '.Add', 'Add {name}', ['name' => $objectName]);
+            }
 
             $this->setButtonName($buttonName);
         }
