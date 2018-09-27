@@ -34,7 +34,7 @@ class HasOneButtonField extends GridField
             ->addComponent(new GridFieldHasOneUnlinkButton($parent))
             ->addComponent(new HasOneAddExistingAutoCompleter());
 
-        $list = new HasOneButtonRelationList($this->record, $relationName, $parent);
+        $list = HasOneButtonRelationList::create($parent, $this->record, $relationName);
 
         // Limit the existing list so that autocomplete will find results
         $list = $list->filter("ID", $this->record->ID);
@@ -53,7 +53,7 @@ class HasOneButtonField extends GridField
     /**
      * @param DataObject|null $record
      */
-    public function setRecord($record): void
+    public function setRecord($record)
     {
         $this->record = $record ?: singleton(get_class($this->record));
     }

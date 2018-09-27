@@ -19,7 +19,8 @@ In Warehouse.php context:
 		}
 		$fields->removeByName("AddressID");
 		$fields->addFieldToTab("Root.Main",
-			HasOneButtonField::create("Address", "Address", $this) //here!
+            // $dataObject, 'RelationName', 'Optional title - would default to Relation Name'
+			HasOneButtonField::create($this, "Address") //here!
 		);
 
 		return $fields;
@@ -27,7 +28,3 @@ In Warehouse.php context:
 ```
 
 You must pass through the parent context ($this), so that the has_one relationship can be set by the `GridFieldDetailForm`.
-
-## Caveats
-
-The field name must match the has_one relationship name.
