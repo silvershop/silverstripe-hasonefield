@@ -63,6 +63,9 @@ class HasOneButtonField extends GridField
         // Limit the existing list so that autocomplete will find results
         $list = $list->filter("ID", $this->record->ID);
 
+        // Get columns to display inline
+        $this->addExtraClass("d-flex align-items-start");
+
         parent::__construct($fieldName ?: $relationName, $title, $list, $config);
     }
 

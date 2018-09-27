@@ -120,18 +120,12 @@ class GridFieldSummaryField implements GridField_HTMLProvider
     {
         $record = $gridField->getRecord();
 
-        Requirements::customCSS(<<<EOT
-.hasonebutton .gridfield-summary-field { padding-bottom: 0; }
-.hasonebutton .gridfield-summary-field:after { border: none; }
-EOT
-            , 'hasonefield-gridfield-summary-field');
-
         $field = ReadonlyField::create(
             $gridField->getName() . '_' . Convert::raw2htmlid(static::class),
             ReadonlyField::name_to_label($this->relationName)
         )
             ->setValue($record->{$this->summaryField})
-            ->addExtraClass('gridfield-summary-field');
+            ->addExtraClass('gridfield-summary-field col px-0');
 
         return [
             $this->targetFragment => $field->FieldHolder(),
