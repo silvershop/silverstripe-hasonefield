@@ -130,7 +130,7 @@ EOT
             $gridField->getName() . '_' . Convert::raw2htmlid(static::class),
             ReadonlyField::name_to_label($this->relationName)
         )
-            ->setValue($record->getField($this->summaryField))
+            ->setValue($record->{$this->summaryField})
             ->addExtraClass('gridfield-summary-field');
 
         return [
