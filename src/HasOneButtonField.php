@@ -7,6 +7,7 @@ use SilverStripe\Forms\GridField\GridField;
 use SilverStripe\Forms\GridField\GridFieldConfig;
 use SilverStripe\Forms\GridField\GridFieldDetailForm;
 use SilverStripe\Forms\GridField\GridFieldAddExistingAutocompleter;
+use SilverStripe\View\Requirements;
 
 /**
  * Class HasOneButtonField
@@ -47,6 +48,8 @@ class HasOneButtonField extends GridField
         $this->record = $parent->{$relationName}();
         $this->parent = $parent;
         $this->relation = $relationName;
+
+        Requirements::css("silvershop/silverstripe-hasonefield:client/css/hasonefield.css");
 
         $config = GridFieldConfig::create()
             ->addComponent(new GridFieldSummaryField($relationName))
