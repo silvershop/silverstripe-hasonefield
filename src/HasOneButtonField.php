@@ -13,8 +13,27 @@ use SilverStripe\Forms\GridField\GridFieldAddExistingAutocompleter;
  */
 class HasOneButtonField extends GridField
 {
+
+    /**
+     * The related object to the parent
+     * 
+     * @var DataObject
+     */
     protected $record;
+
+    /**
+     * The current parent of the relationship (the base object we are editing)
+     * 
+     * @var DataObject
+     */
     protected $parent;
+
+    /**
+     * The name of the relation this field is managing
+     * 
+     * @var string
+     */
+    protected $relation;
 
     /**
      * HasOneButtonField constructor.
@@ -27,6 +46,8 @@ class HasOneButtonField extends GridField
     {
         $this->record = $parent->{$relationName}();
         $this->parent = $parent;
+        $this->relation = $relationName;
+
         $config = GridFieldConfig::create()
             ->addComponent(new GridFieldSummaryField($relationName))
             ->addComponent(new GridFieldDetailForm())
@@ -56,5 +77,51 @@ class HasOneButtonField extends GridField
     public function setRecord($record)
     {
         $this->record = $record ?: singleton(get_class($this->record));
+    }
+
+    /**
+     * Get the current parent
+     *
+     * @return DataObject
+     */ 
+    public function getParent()
+    {
+        return $this->parent;
+    }
+
+    /**
+     * Set the current parent
+     *
+     * @param DataObject $parent parent of the relationship
+     *
+     * @return self
+     */ 
+    public function setParent(DataObject $parent)
+    {
+        $this->parent = $parent;
+        return $this;
+    }
+
+    /**
+     * Get the name of the relation this field is managing
+     *
+     * @return string
+     */ 
+    public function getRelation()
+    {
+        return $this->relation;
+    }
+
+    /**
+     * Set the name of the relation this field is managing
+     *
+     * @param string $relation The relation name
+     *
+     * @return self
+     */ 
+    public function setRelation(string $relation)
+    {
+        $this->relation = $relation;
+        return $this;
     }
 }
