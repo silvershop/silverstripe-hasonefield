@@ -67,8 +67,9 @@ class HasOneAddExistingAutoCompleter extends GridFieldAddExistingAutocompleter
             $parent->write();
 
             $gridField->State->GridFieldAddRelation = $data['relationID'];
+            $gridField->getList()->add($item);
 
-            return Controller::curr()->getResponse()->setStatusCode(
+            Controller::curr()->getResponse()->setStatusCode(
                 200,
                 _t(__CLASS__ . '.Linked', "Linked")
             );
