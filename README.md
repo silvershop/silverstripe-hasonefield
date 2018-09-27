@@ -27,7 +27,3 @@ In Warehouse.php context:
 ```
 
 You must pass through the parent context ($this), so that the has_one relationship can be set by the `GridFieldDetailForm`.
-
-## Caveats
-
-The field name must match the has_one relationship name.
