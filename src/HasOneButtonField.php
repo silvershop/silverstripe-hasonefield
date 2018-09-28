@@ -50,6 +50,7 @@ class HasOneButtonField extends GridField
         $this->relation = $relationName;
 
         Requirements::css("silvershop/silverstripe-hasonefield:client/css/hasonefield.css");
+        Requirements::javascript("silvershop/silverstripe-hasonefield:client/js/hasonefield.js");
 
         $config = GridFieldConfig::create()
             ->addComponent(new GridFieldSummaryField($relationName))
