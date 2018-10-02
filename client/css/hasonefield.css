@@ -1,0 +1,9 @@
+.hasonebutton .gridfield-summary-field {
+    padding-bottom: 0;
+}
+.hasonebutton .gridfield-summary-field:after {
+    border: none;
+}
+.hasonebutton table.grid-field__table {
+    display: none;
+}
