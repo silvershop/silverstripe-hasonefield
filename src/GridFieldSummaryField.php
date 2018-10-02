@@ -38,7 +38,7 @@ class GridFieldSummaryField implements GridField_HTMLProvider
      * @param string $summaryField The field on the record to use for the summary
      * @param string $targetFragment The location of this fragment
      */
-    public function __construct($name, $summaryField = "Title", $targetFragment = 'before')
+    public function __construct($name, $summaryField = "Title", $targetFragment = 'buttons-before-left')
     {
         $this->relationName = $name;
         $this->targetFragment = $targetFragment;
@@ -128,7 +128,7 @@ class GridFieldSummaryField implements GridField_HTMLProvider
             ->addExtraClass('gridfield-summary-field col px-0');
 
         return [
-            $this->targetFragment => $field->FieldHolder(),
+            $this->targetFragment => $field->Field(),
         ];
     }
 }

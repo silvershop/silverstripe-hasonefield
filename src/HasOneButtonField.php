@@ -3,11 +3,12 @@
 namespace SilverShop\HasOneField;
 
 use SilverStripe\ORM\DataObject;
+use SilverStripe\View\Requirements;
 use SilverStripe\Forms\GridField\GridField;
 use SilverStripe\Forms\GridField\GridFieldConfig;
+use SilverShop\HasOneField\GridFieldHasOneButtonRow;
 use SilverStripe\Forms\GridField\GridFieldDetailForm;
 use SilverStripe\Forms\GridField\GridFieldAddExistingAutocompleter;
-use SilverStripe\View\Requirements;
 
 /**
  * Class HasOneButtonField
@@ -53,11 +54,12 @@ class HasOneButtonField extends GridField
         Requirements::javascript("silvershop/silverstripe-hasonefield:client/js/hasonefield.js");
 
         $config = GridFieldConfig::create()
+            ->addComponent(new GridFieldHasOneButtonRow())
             ->addComponent(new GridFieldSummaryField($relationName))
             ->addComponent(new GridFieldDetailForm())
-            ->addComponent(new GridFieldHasOneEditButton())
-            ->addComponent(new GridFieldHasOneUnlinkButton($parent))
-            ->addComponent(new HasOneAddExistingAutoCompleter());
+            ->addComponent(new GridFieldHasOneUnlinkButton($parent, 'buttons-before-right'))
+            ->addComponent(new GridFieldHasOneEditButton('buttons-before-right'))
+            ->addComponent(new HasOneAddExistingAutoCompleter('buttons-before-right'));
 
         $list = HasOneButtonRelationList::create($parent, $this->record, $relationName);
 
