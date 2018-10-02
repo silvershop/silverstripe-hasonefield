@@ -125,7 +125,7 @@ class GridFieldSummaryField implements GridField_HTMLProvider
             ReadonlyField::name_to_label($this->relationName)
         )
             ->setValue($record->{$this->summaryField})
-            ->addExtraClass('gridfield-summary-field col px-0');
+            ->addExtraClass('gridfield-summary-field');
 
         return [
             $this->targetFragment => $field->Field(),
