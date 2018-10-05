@@ -46,7 +46,7 @@ class HasOneButtonField extends GridField
      */
     public function __construct(DataObject $parent, $relationName, $fieldName = null, $title = null)
     {
-        $this->record = $parent->{$relationName}();
+        $this->setRecord($parent->{$relationName}());
         $this->parent = $parent;
         $this->relation = $relationName;
 
