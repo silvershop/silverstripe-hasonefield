@@ -18,7 +18,7 @@ class HasOneButtonRelationList extends DataList
     /**
      * @var string
      */
-    protected $name;
+    protected $relationName;
 
     /**
      * @var DataObject
@@ -29,12 +29,12 @@ class HasOneButtonRelationList extends DataList
      * HasOneButtonRelationList constructor.
      * @param DataObject $parent
      * @param DataObject $record
-     * @param string $name
+     * @param string $relationName
      */
-    public function __construct(DataObject $parent, DataObject $record, $name)
+    public function __construct(DataObject $parent, DataObject $record, $relationName)
     {
         $this->record = $record;
-        $this->name = $name;
+        $this->relationName = $relationName;
         $this->parent = $parent;
 
         parent::__construct($record->ClassName);
@@ -42,13 +42,13 @@ class HasOneButtonRelationList extends DataList
 
     public function add($item)
     {
-        $this->parent->setField("{$this->name}ID", $item->ID);
+        $this->parent->setField("{$this->relationName}ID", $item->ID);
         $this->parent->write();
     }
 
     public function remove($item)
     {
-        $this->parent->setField("{$this->name}ID", 0);
+        $this->parent->setField("{$this->relationName}ID", 0);
         $this->parent->write();
     }
 }
