@@ -42,7 +42,7 @@ class HasOneButtonRelationList extends ArrayList
 
     public function add($item)
     {
-        $this->parent->setField("{$this->relationName}ID", $item->ID);
+        $this->parent->{$this->relationName} = $item;
         $this->parent->write();
 
         $this->items = [$item];
@@ -50,7 +50,7 @@ class HasOneButtonRelationList extends ArrayList
 
     public function remove($item)
     {
-        $this->parent->setField("{$this->relationName}ID", 0);
+        $this->parent->{$this->relationName} = null;
         $this->parent->write();
 
         $this->items = [];
