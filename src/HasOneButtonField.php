@@ -18,21 +18,21 @@ class HasOneButtonField extends GridField
 
     /**
      * The related object to the parent
-     * 
+     *
      * @var DataObject
      */
     protected $record;
 
     /**
      * The current parent of the relationship (the base object we are editing)
-     * 
+     *
      * @var DataObject
      */
     protected $parent;
 
     /**
      * The name of the relation this field is managing
-     * 
+     *
      * @var string
      */
     protected $relation;
@@ -70,6 +70,7 @@ class HasOneButtonField extends GridField
         $this->addExtraClass("d-flex align-items-start");
 
         parent::__construct($fieldName ?: $relationName, $title, $list, $config);
+        $this->setModelClass(($parent->$relationName)->ClassName);
     }
 
     /**
@@ -92,7 +93,7 @@ class HasOneButtonField extends GridField
      * Get the current parent
      *
      * @return DataObject
-     */ 
+     */
     public function getParent()
     {
         return $this->parent;
@@ -104,7 +105,7 @@ class HasOneButtonField extends GridField
      * @param DataObject $parent parent of the relationship
      *
      * @return self
-     */ 
+     */
     public function setParent(DataObject $parent)
     {
         $this->parent = $parent;
@@ -115,7 +116,7 @@ class HasOneButtonField extends GridField
      * Get the name of the relation this field is managing
      *
      * @return string
-     */ 
+     */
     public function getRelation()
     {
         return $this->relation;
@@ -127,7 +128,7 @@ class HasOneButtonField extends GridField
      * @param string $relation The relation name
      *
      * @return self
-     */ 
+     */
     public function setRelation(string $relation)
     {
         $this->relation = $relation;
