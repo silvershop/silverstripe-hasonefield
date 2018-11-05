@@ -70,7 +70,10 @@ class HasOneButtonField extends GridField
         $this->addExtraClass("d-flex align-items-start");
 
         parent::__construct($fieldName ?: $relationName, $title, $list, $config);
-        $this->setModelClass(($parent->$relationName)->ClassName);
+        
+        if (!is_array($parent->$relationName) && class_exists($parent->$relationName)) {
+            $this->setModelClass(($parent->$relationName)->ClassName);
+        }
     }
 
     /**
