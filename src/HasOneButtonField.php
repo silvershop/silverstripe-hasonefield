@@ -44,7 +44,7 @@ class HasOneButtonField extends GridField
      * @param string|null $fieldName
      * @param string|null $title
      */
-    public function __construct(DataObject $parent, $relationName, $fieldName = null, $title = null)
+    public function __construct(DataObject $parent, $relationName, $fieldName = null, $title = null, $customConfig = array())
     {
         $record = $parent->{$relationName}();
         $this->setRecord($record);
@@ -54,13 +54,21 @@ class HasOneButtonField extends GridField
         Requirements::css("silvershop/silverstripe-hasonefield:client/css/hasonefield.css");
         Requirements::javascript("silvershop/silverstripe-hasonefield:client/js/hasonefield.js");
 
-        $config = GridFieldConfig::create()
-            ->addComponent(new GridFieldHasOneButtonRow())
-            ->addComponent(new GridFieldSummaryField($relationName))
-            ->addComponent(new GridFieldDetailForm())
-            ->addComponent(new GridFieldHasOneUnlinkButton($parent, 'buttons-before-right'))
-            ->addComponent(new GridFieldHasOneEditButton('buttons-before-right'))
-            ->addComponent(new HasOneAddExistingAutoCompleter('buttons-before-right'));
+        if (!empty($customConfig)) {
+            $config = GridFieldConfig::create();
+            foreach ($customConfig as $component) {
+                $config->addComponent($component);
+            }
+        }
+        else {
+            $config = GridFieldConfig::create()
+                ->addComponent(new GridFieldHasOneButtonRow())
+                ->addComponent(new GridFieldSummaryField($relationName))
+                ->addComponent(new GridFieldDetailForm())
+                ->addComponent(new GridFieldHasOneUnlinkButton($parent, 'buttons-before-right'))
+                ->addComponent(new GridFieldHasOneEditButton('buttons-before-right'))
+                ->addComponent(new HasOneAddExistingAutoCompleter('buttons-before-right'));
+        }
 
         $list = HasOneButtonRelationList::create($parent, $this->record, $relationName);
 
@@ -136,3 +144,4 @@ class HasOneButtonField extends GridField
         return $this;
     }
 }
+
