@@ -44,7 +44,7 @@ class HasOneButtonField extends GridField
      * @param string|null $fieldName
      * @param string|null $title
      */
-    public function __construct(DataObject $parent, $relationName, $fieldName = null, $title = null, $customConfig = array())
+    public function __construct(DataObject $parent, $relationName, $fieldName = null, $title = null, GridFieldConfig $customConfig = null)
     {
         $record = $parent->{$relationName}();
         $this->setRecord($record);
@@ -54,21 +54,13 @@ class HasOneButtonField extends GridField
         Requirements::css("silvershop/silverstripe-hasonefield:client/css/hasonefield.css");
         Requirements::javascript("silvershop/silverstripe-hasonefield:client/js/hasonefield.js");
 
-        if (!empty($customConfig)) {
-            $config = GridFieldConfig::create();
-            foreach ($customConfig as $component) {
-                $config->addComponent($component);
-            }
-        }
-        else {
-            $config = GridFieldConfig::create()
-                ->addComponent(new GridFieldHasOneButtonRow())
-                ->addComponent(new GridFieldSummaryField($relationName))
-                ->addComponent(new GridFieldDetailForm())
-                ->addComponent(new GridFieldHasOneUnlinkButton($parent, 'buttons-before-right'))
-                ->addComponent(new GridFieldHasOneEditButton('buttons-before-right'))
-                ->addComponent(new HasOneAddExistingAutoCompleter('buttons-before-right'));
-        }
+        $config = GridFieldConfig::create()
+            ->addComponent(new GridFieldHasOneButtonRow())
+            ->addComponent(new GridFieldSummaryField($relationName))
+            ->addComponent(new GridFieldDetailForm())
+            ->addComponent(new GridFieldHasOneUnlinkButton($parent, 'buttons-before-right'))
+            ->addComponent(new GridFieldHasOneEditButton('buttons-before-right'))
+            ->addComponent(new HasOneAddExistingAutoCompleter('buttons-before-right'));
 
         $list = HasOneButtonRelationList::create($parent, $this->record, $relationName);
 
@@ -78,7 +70,7 @@ class HasOneButtonField extends GridField
         // Get columns to display inline
         $this->addExtraClass("d-flex align-items-start");
 
-        parent::__construct($fieldName ?: $relationName, $title, $list, $config);
+        parent::__construct($fieldName ?: $relationName, $title, $list, ($customConfig) ?: $config);
         $this->setModelClass($record->ClassName);
     }
 
@@ -144,4 +136,3 @@ class HasOneButtonField extends GridField
         return $this;
     }
 }
-
