@@ -1,0 +1,22 @@
+language: php
+
+env:
+  global:
+    - COMPOSER_ROOT_VERSION="2.x-dev" DB=MYSQL
+
+php:
+  - 5.6
+  - 7.0
+  - 7.1
+  - 7.2
+
+before_script:
+  - phpenv rehash
+  - phpenv config-rm xdebug.ini
+
+  - composer validate
+  - composer require --no-update cwp/starter-theme 2.x-dev
+  - composer install --prefer-source --no-interaction --no-progress --no-suggest --optimize-autoloader --verbose --profile
+
+script:
+  - vendor/bin/phpunit --testsuite cwp-recipe-cms

@@ -1,30 +1,40 @@
 # SilverStripe has_one field
 
-Allows you to create a CMS button for creating and editing a single related object. It is actually a grid field, but just looks like a button.
+[![Build Status](https://travis-ci.org/silvershop/silverstripe-hasonefield.svg?branch=master)](https://travis-ci.org/silvershop/silverstripe-hasonefield)
+[![Latest Stable Version](https://poser.pugx.org/silvershop/silverstripe-hasonefield/v/stable)](https://packagist.org/packages/silvershop/silverstripe-hasonefield)
+[![Latest Unstable Version](https://poser.pugx.org/silvershop/silverstripe-hasonefield/v/unstable)](https://packagist.org/packages/silvershop/silverstripe-hasonefield)
 
-![demo](https://raw.github.com/wiki/burnbright/silverstripe-hasonefield/images/hasonefield.gif)
+
+Allows you to create a CMS button for creating and editing a single related
+object. It is actually a grid field, but just looks like a button.
+
+![demo](https://raw.github.com/wiki/silvershop/silverstripe-hasonefield/images/hasonefield.gif)
+
+## Installation
+
+```
+composer require silvershop/silverstripe-hasonefield
+```
 
 ## Usage
 
-In Warehouse.php context:
 ```php
     use SilverShop\HasOneField\HasOneButtonField;
 
-	public function getCMSFields() {
-		$fields = parent::getCMSFields();
-		if($this->Address()->exists()){
-			$fields->addFieldsToTab("Root.Main", array(
-				ReadonlyField::create("add", "Address", $this->Address()->toString())
-			));
-		}
-		$fields->removeByName("AddressID");
-		$fields->addFieldToTab("Root.Main",
-            // $dataObject, 'RelationName', 'Optional title - would default to Relation Name'
-			HasOneButtonField::create($this, "Address") //here!
-		);
+    private static $has_one = [
+        'Address' => 'Address'
+    ];
 
-		return $fields;
-	}
+    public function getCMSFields() {
+        $fields = parent::getCMSFields();
+
+        $fields->addFieldToTab("Root.Main",
+            HasOneButtonField::create($this, "Address")
+        );
+
+        return $fields;
+    }
 ```
 
-You must pass through the parent context ($this), so that the has_one relationship can be set by the `GridFieldDetailForm`.
+You must pass through the parent context ($this), so that the `has_one`
+relationship can be set by the `GridFieldDetailForm`.

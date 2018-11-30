@@ -1,18 +1,19 @@
 {
     "name": "silvershop/silverstripe-hasonefield",
-    "description": "Edit a has_one relationship using the gridfield editor, triggered by clicking a button.",
+    "description": "Edit a has_one relationship using a GridField, triggered by clicking a button.",
     "license": "BSD-2-Clause",
     "type": "silverstripe-vendormodule",
     "require": {
         "silverstripe/vendor-plugin": "^1.0",
         "silverstripe/framework": "^4.0"
     },
-    "authors": [
-        {
-            "name": "Jeremy Shipman",
-            "email": "jeremy@burnbright.net"
-        }
-    ],
+    "require-dev": {
+        "phpunit/phpunit": "^5.7"
+    },
+    "authors": [{
+        "name": "Jeremy Shipman",
+        "email": "jeremy@burnbright.net"
+    }],
     "autoload": {
         "psr-4": {
             "SilverShop\\HasOneField\\": "src/"
