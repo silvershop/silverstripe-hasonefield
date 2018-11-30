@@ -44,7 +44,7 @@ class HasOneButtonField extends GridField
      * @param string|null $fieldName
      * @param string|null $title
      */
-    public function __construct(DataObject $parent, $relationName, $fieldName = null, $title = null)
+    public function __construct(DataObject $parent, $relationName, $fieldName = null, $title = null, GridFieldConfig $customConfig = null)
     {
         $record = $parent->{$relationName}();
         $this->setRecord($record);
@@ -70,7 +70,7 @@ class HasOneButtonField extends GridField
         // Get columns to display inline
         $this->addExtraClass("d-flex align-items-start");
 
-        parent::__construct($fieldName ?: $relationName, $title, $list, $config);
+        parent::__construct($fieldName ?: $relationName, $title, $list, ($customConfig) ?: $config);
         $this->setModelClass($record->ClassName);
     }
 
