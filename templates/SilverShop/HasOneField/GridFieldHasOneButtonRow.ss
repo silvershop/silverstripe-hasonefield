@@ -1,4 +1,4 @@
-<div class="toolbar--content form-group px-lg-0 field ss-gridfield-buttonrow ss-gridfield-buttonrow-{$TargetFragmentName}">
+<div class="toolbar--content form-group stacked px-lg-0 field ss-gridfield-buttonrow ss-gridfield-buttonrow-{$TargetFragmentName}">
 	<label class="form__field-label">
 		$GridField.Title
 	</label>
