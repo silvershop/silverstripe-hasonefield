@@ -6,7 +6,7 @@ use SilverStripe\Dev\SapphireTest;
 
 class HasOneButtonFieldTest extends SapphireTest
 {
-    private static $fixture_file = 'fixtures.yml';
+    protected static $fixture_file = 'fixtures.yml';
 
     public function testHasOneButtonField()
     {
