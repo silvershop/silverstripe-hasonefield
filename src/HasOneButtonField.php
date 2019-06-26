@@ -43,8 +43,10 @@ class HasOneButtonField extends GridField
      * @param string $relationName
      * @param string|null $fieldName
      * @param string|null $title
+     * @param GridFieldConfig|null $customConfig
+     * @param boolean|null $useAutocompleter
      */
-    public function __construct(DataObject $parent, $relationName, $fieldName = null, $title = null, GridFieldConfig $customConfig = null)
+    public function __construct(DataObject $parent, $relationName, $fieldName = null, $title = null, GridFieldConfig $customConfig = null, $useAutocompleter = true)
     {
         $record = $parent->{$relationName}();
         $this->setRecord($record);
@@ -59,16 +61,16 @@ class HasOneButtonField extends GridField
             ->addComponent(new GridFieldSummaryField($relationName))
             ->addComponent(new GridFieldDetailForm())
             ->addComponent(new GridFieldHasOneUnlinkButton($parent, 'buttons-before-right'))
-            ->addComponent(new GridFieldHasOneEditButton('buttons-before-right'))
-            ->addComponent(new HasOneAddExistingAutoCompleter('buttons-before-right'));
+            ->addComponent(new GridFieldHasOneEditButton('buttons-before-right'));
+        
+        if ($useAutocompleter) {
+            $config->addComponent(new HasOneAddExistingAutoCompleter('buttons-before-right'));
+        }
 
         $list = HasOneButtonRelationList::create($parent, $this->record, $relationName);
 
         // Limit the existing list so that autocomplete will find results
         $list = $list->filter("ID", $this->record->ID);
-
-        // Get columns to display inline
-        $this->addExtraClass("d-flex align-items-start");
 
         parent::__construct($fieldName ?: $relationName, $title, $list, ($customConfig) ?: $config);
         $this->setModelClass($record->ClassName);
