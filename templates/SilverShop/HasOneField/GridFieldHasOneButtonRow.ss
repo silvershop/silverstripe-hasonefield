@@ -1,10 +1,10 @@
-<div class="toolbar--content form-group stacked px-lg-0 field ss-gridfield-buttonrow ss-gridfield-buttonrow-{$TargetFragmentName}">
+<div class="form-group field hasone">
 	<label class="form__field-label">
 		$GridField.Title
 	</label>
 	<div class="form__field-holder form-row">
 		<div class="col">$LeftFragment</div>
-		<div class="col-auto btn-toolbar">
+		<div class="col-auto d-flex pr-0">
 			$RightFragment
 		</div>
 	</div>
