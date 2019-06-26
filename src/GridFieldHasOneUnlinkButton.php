@@ -140,7 +140,7 @@ class GridFieldHasOneUnlinkButton implements GridField_HTMLProvider, GridField_A
         );
 
         $field->setAttribute('data-icon', 'chain--plus')
-            ->addExtraClass('btn btn-outline-secondary font-icon-link-broken action_gridfield_unlinkrelation');
+            ->addExtraClass('align-items-center d-flex btn btn-outline-secondary font-icon-link-broken action_gridfield_unlinkrelation');
 
         return [
             $this->targetFragment => $field->Field(),

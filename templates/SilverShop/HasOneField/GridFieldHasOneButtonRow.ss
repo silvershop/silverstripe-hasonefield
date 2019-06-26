@@ -4,7 +4,7 @@
 	</label>
 	<div class="form__field-holder form-row">
 		<div class="col">$LeftFragment</div>
-		<div class="col-auto d-flex">
+		<div class="col-auto d-flex pr-0">
 			$RightFragment
 		</div>
 	</div>
