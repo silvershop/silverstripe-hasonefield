@@ -35,9 +35,9 @@ class GridFieldHasOneEditButton extends GridFieldAddNewButton implements GridFie
             $objectName = $singleton->i18n_singular_name();
 
             if ($record->exists()) {
-                $buttonName = _t(GridField::class . '.Edit', 'Edit {name}', ['name' => $objectName]);
+                $buttonName = _t('SilverStripe\Forms\GridField\GridField.Edit', 'Edit {name}', ['name' => $objectName]);
             } else {
-                $buttonName = _t(GridField::class . '.Add', 'Add {name}', ['name' => $objectName]);
+                $buttonName = _t('SilverStripe\Forms\GridField\GridField.Add', 'Add {name}', ['name' => $objectName]);
             }
 
             $this->setButtonName($buttonName);
