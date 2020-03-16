@@ -38,3 +38,24 @@ composer require silvershop/silverstripe-hasonefield
 
 You must pass through the parent context ($this), so that the `has_one`
 relationship can be set by the `GridFieldDetailForm`.
+
+## Filtering Results
+
+To filter the results shown in the picker use `HasOneAddExistingAutoCompleter::setSearchList`.
+
+```php
+$property = HasOneButtonField::create(
+    $this,
+    'Address'
+);
+
+$property
+    ->getConfig()
+    ->getComponentByType(HasOneAddExistingAutoCompleter::class)
+    ->setSearchList(Property::get()->filter("Country", "GB"));
+
+$fields->addFieldToTab(
+    'Root.Main',
+    $property
+);
+```
