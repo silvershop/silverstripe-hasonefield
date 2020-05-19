@@ -16,6 +16,14 @@ use SilverStripe\ORM\ValidationException;
 class GridFieldHasOneUnlinkButton implements GridField_HTMLProvider, GridField_ActionProvider
 {
     /**
+     * If this is set to true, this {@link GridField_ActionProvider} will
+     * remove the object from the list, instead of deleting.
+     *
+     * @var boolean
+     */
+    protected $removeRelation = true;
+
+    /**
      * Fragment to write the button to
      */
     protected $targetFragment;
@@ -84,7 +92,7 @@ class GridFieldHasOneUnlinkButton implements GridField_HTMLProvider, GridField_A
      */
     public function getActions($gridField)
     {
-        return ['unlinkrelation'];
+        return ['unlinkrelation', 'deleterecord'];
     }
 
     /**
@@ -98,7 +106,9 @@ class GridFieldHasOneUnlinkButton implements GridField_HTMLProvider, GridField_A
      */
     public function handleAction(GridField $gridField, $actionName, $arguments, $data)
     {
-        if ($actionName !== 'unlinkrelation') return;
+        if (!in_array($actionName, ['unlinkrelation', 'deleterecord'])) {
+            return;
+        }
 
         $record = $gridField->getRecord();
         if (!$record || !$record->exists()) return;
@@ -114,12 +124,23 @@ class GridFieldHasOneUnlinkButton implements GridField_HTMLProvider, GridField_A
         }
 
         $gridField->setRecord(null);
-        $gridField->getList()->remove($item);
 
-        Controller::curr()->getResponse()->setStatusCode(
-            200,
-            _t(__CLASS__ . '.Unlinked', "Unlinked")
-        );
+        if ($actionName === 'deleterecord') {
+            if (!$item->canDelete()) {
+                throw new ValidationException(
+                    _t(__CLASS__ . '.DeletePermissionsFailure', "No delete permissions")
+                );
+            }
+
+            $item->delete();
+
+            $message = _t(__CLASS__ . '.Deleted', 'Deleted');
+        } else {
+            $gridField->getList()->remove($item);
+            $message = _t(__CLASS__ . '.Unlinked', 'Unlinked');
+        }
+
+        Controller::curr()->getResponse()->setStatusCode(200, $message);
     }
 
     /**
@@ -131,19 +152,55 @@ class GridFieldHasOneUnlinkButton implements GridField_HTMLProvider, GridField_A
         $record = $gridField->getRecord();
         if (!$record || !$record->exists()) return [];
 
-        $field = new GridField_FormAction(
-            $gridField,
-            'gridfield_unlinkrelation',
-            _t(__CLASS__ . '.Unlink', "Unlink"),
-            'unlinkrelation',
-            'unlinkrelation'
-        );
+        if (!$this->getRemoveRelation()) {
+            $field = new GridField_FormAction(
+                $gridField,
+                'gridfield_unlinkrelation',
+                _t(__CLASS__ . '.Delete', 'Delete'),
+                'deleterecord',
+                'deleterecord'
+            );
 
-        $field->setAttribute('data-icon', 'chain--plus')
-            ->addExtraClass('align-items-center d-flex btn btn-outline-secondary font-icon-link-broken action_gridfield_unlinkrelation');
+            $field->setAttribute('data-icon', 'chain--plus')
+                ->addExtraClass('align-items-center d-flex btn btn-outline-secondary font-icon-trash action_gridfield_unlinkrelation');
+        } else {
+            $field = new GridField_FormAction(
+                $gridField,
+                'gridfield_unlinkrelation',
+                _t(__CLASS__ . '.Unlink', "Unlink"),
+                'unlinkrelation',
+                'unlinkrelation'
+            );
+
+            $field->setAttribute('data-icon', 'chain--plus')
+                ->addExtraClass('align-items-center d-flex btn btn-outline-secondary font-icon-link-broken action_gridfield_unlinkrelation');
+        }
 
         return [
             $this->targetFragment => $field->Field(),
         ];
+    }
+
+    /**
+     * Get whether to remove or delete the relation
+     *
+     * @return bool
+     */
+    public function getRemoveRelation()
+    {
+        return $this->removeRelation;
+    }
+
+    /**
+     * Set whether to remove or delete the relation
+     *
+     * @param bool $removeRelation
+     * @return $this
+     */
+    public function setRemoveRelation($removeRelation)
+    {
+        $this->removeRelation = (bool) $removeRelation;
+
+        return $this;
     }
 }
