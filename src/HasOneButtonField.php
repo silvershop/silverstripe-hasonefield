@@ -53,16 +53,13 @@ class HasOneButtonField extends GridField
         $this->parent = $parent;
         $this->relation = $relationName;
 
-        Requirements::css("silvershop/silverstripe-hasonefield:client/dist/styles/bundle.css");
-        Requirements::javascript("silvershop/silverstripe-hasonefield:client/dist/js/bundle.js");
-
         $config = GridFieldConfig::create()
             ->addComponent(new GridFieldHasOneButtonRow())
             ->addComponent(new GridFieldSummaryField($relationName))
             ->addComponent(new GridFieldDetailForm())
             ->addComponent(new GridFieldHasOneUnlinkButton($parent, 'buttons-before-right'))
             ->addComponent(new GridFieldHasOneEditButton('buttons-before-right'));
-        
+
         if ($useAutocompleter) {
             $config->addComponent(new HasOneAddExistingAutoCompleter('buttons-before-right'));
         }
@@ -136,5 +133,14 @@ class HasOneButtonField extends GridField
     {
         $this->relation = $relation;
         return $this;
+    }
+
+
+    public function FieldHolder($properties = [])
+    {
+        Requirements::css("silvershop/silverstripe-hasonefield:client/dist/styles/bundle.css");
+        Requirements::javascript("silvershop/silverstripe-hasonefield:client/dist/js/bundle.js");
+
+        return parent::FieldHolder($properties);
     }
 }
