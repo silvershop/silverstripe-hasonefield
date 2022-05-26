@@ -42,16 +42,55 @@ class HasOneButtonRelationList extends ArrayList
 
     public function add($item)
     {
-        $this->parent->{$this->relationName} = $item;
-        $this->parent->write();
+        $parent = $this->parent;
+        // Get the relationship type (has_one or belongs_to)
+        $relationType = $parent->getRelationType($this->relationName);
+        switch ($relationType) {
+            // If belongs_to, retrieve and write to the has_one side of the relationship
+            case 'belongs_to': 
+                $parent->{$this->relationName} = $item;
+                $hasOneRecord = $parent->getComponent($this->relationName);
+                $hasOneRecord->write();
+                break;
+            // Otherwise assume has_one, and write to this record
+            default: 
+                $parent->{$this->relationName} = $item;
+                $parent->write();
+                break;
+        }
 
         $this->items = [$item];
     }
 
     public function remove($item)
     {
-        $this->parent->{$this->relationName} = null;
-        $this->parent->write();
+        $parent = $this->parent;
+        $relationName = $this->relationName;
+        // Get the relationship type (has_one or belongs_to)
+        $relationType = $parent->getRelationType($relationName);
+        switch ($relationType) {
+            // If belongs_to, retrieve and write to the has_one side of the relationship
+            case 'belongs_to':
+                $hasOneRecord = $parent->getComponent($this->relationName);
+                $parentClass = $parent->getClassName();
+                
+                $schema = $parentClass::getSchema();
+                $hasOneFieldName = $schema->getRemoteJoinField(
+                    $parentClass,
+                    $relationName,
+                    $relationType,
+                    $polymorphic
+                );
+                
+                $hasOneRecord->{$hasOneFieldName} = null;
+                $hasOneRecord->write();
+                break;
+            // Otherwise assume has_one, and write to this record
+            default:
+                $parent->{$relationName} = null;
+                $parent->write();
+                break;
+        }
 
         $this->items = [];
     }
