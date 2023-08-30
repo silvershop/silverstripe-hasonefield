@@ -130,7 +130,7 @@ class HasOneAddExistingAutoCompleter extends GridFieldAddExistingAutocompleter
 
         Config::nest();
 
-        SSViewer::config()->update('source_file_comments', false);
+        SSViewer::config()->set('source_file_comments', false);
 
         $viewer = SSViewer::fromString($this->resultsFormat);
 
@@ -147,7 +147,7 @@ class HasOneAddExistingAutoCompleter extends GridFieldAddExistingAutocompleter
         Config::unnest();
 
         return HTTPResponse::create()
-            ->setBody(Convert::array2json($json))
+            ->setBody(json_encode($json))
             ->addHeader('Content-Type', 'text/json');
     }
 }
