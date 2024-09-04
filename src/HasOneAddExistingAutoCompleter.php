@@ -49,6 +49,9 @@ class HasOneAddExistingAutoCompleter extends GridFieldAddExistingAutocompleter
     {
         if ($actionName == 'addto' && isset($data['relationID']) && $data['relationID']) {
             $parent = $gridField->getParent();
+            if (!$parent->isInDB()) {
+                return;
+            }
             $relation = $gridField->getRelation() . "ID";
             $item = DataObject::get($gridField->getModelClass())
                 ->byID($data['relationID']);
