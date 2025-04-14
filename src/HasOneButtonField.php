@@ -46,7 +46,7 @@ class HasOneButtonField extends GridField
      * @param GridFieldConfig|null $customConfig
      * @param boolean|null $useAutocompleter
      */
-    public function __construct(DataObject $parent, $relationName, $fieldName = null, $title = null, GridFieldConfig $customConfig = null, $useAutocompleter = true)
+    public function __construct(DataObject $parent, $relationName, $fieldName = null, $title = null, ?GridFieldConfig $customConfig = null, $useAutocompleter = true)
     {
         $record = $parent->{$relationName}();
         $this->setRecord($record);
