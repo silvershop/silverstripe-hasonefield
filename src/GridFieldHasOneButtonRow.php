@@ -3,7 +3,7 @@
 namespace SilverShop\HasOneField;
 
 use SilverStripe\View\SSViewer;
-use SilverStripe\View\ArrayData;
+use SilverStripe\Model\ArrayData;
 use SilverStripe\Forms\GridField\GridFieldButtonRow;
 
 class GridFieldHasOneButtonRow extends GridFieldButtonRow
