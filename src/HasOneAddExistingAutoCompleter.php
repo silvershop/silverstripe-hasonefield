@@ -3,16 +3,18 @@
 namespace SilverShop\HasOneField;
 
 use SilverStripe\Control\Controller;
+use SilverStripe\Core\Injector\Injector;
+use SilverStripe\Core\Validation\ValidationException;
 use SilverStripe\Forms\GridField\GridField;
-use SilverStripe\Forms\GridField\GridField_HTMLProvider;
-use SilverStripe\Forms\GridField\GridFieldAddNewButton;
-use SilverStripe\View\ArrayData;
 use SilverStripe\View\SSViewer;
 use SilverStripe\Forms\GridField\GridFieldAddExistingAutocompleter;
 use SilverStripe\ORM\{ DataList, DataObject };
 use SilverStripe\Core\Config\Config;
 use SilverStripe\Core\Convert;
 use SilverStripe\Control\HTTPResponse;
+use SilverStripe\View\TemplateEngine;
+use SilverStripe\View\ViewLayerData;
+use LogicException;
 
 /**
  * Class GridFieldHasOneEditButton
@@ -91,14 +93,16 @@ class HasOneAddExistingAutoCompleter extends GridFieldAddExistingAutocompleter
      */
     public function doSearch($gridField, $request)
     {
+        $searchStr = $request->getVar('gridfield_relationsearch');
         $dataClass = $gridField->getModelClass();
 
-        $allList = $this->searchList ? $this->searchList : DataList::create($dataClass);
+        if (!is_a($dataClass, DataObject::class, true)) {
+            throw new LogicException(__CLASS__ . " must be used with DataObject subclasses. Found '$dataClass'");
+        }
 
         $searchFields = ($this->getSearchFields())
             ? $this->getSearchFields()
             : $this->scaffoldSearchFields($dataClass);
-
         if (!$searchFields) {
             throw new LogicException(
                 sprintf(
@@ -108,49 +112,48 @@ class HasOneAddExistingAutoCompleter extends GridFieldAddExistingAutocompleter
             );
         }
 
-        $params = array();
-
+        $params = [];
         foreach ($searchFields as $searchField) {
-            $name = (strpos($searchField, ':') !== false) ? $searchField : "$searchField:StartsWith";
-            $params[$name] = $request->getVar('gridfield_relationsearch');
+            $name = (strpos($searchField ?? '', ':') !== false) ? $searchField : "$searchField:StartsWith";
+            $params[$name] = $searchStr;
         }
 
-        $results = $allList
+        $results = null;
+        if ($this->searchList) {
+            // Assume custom sorting, don't apply default sorting
+            $results = $this->searchList;
+        } else {
+            $results = DataList::create($dataClass);
+        }
+
+        // Apply baseline filtering and limits which should hold regardless of any customisations
+        $results = $results
             ->filterAny($params)
-            ->sort(strtok($searchFields[0], ':'), 'ASC')
+            ->sort(strtok($searchFields[0] ?? '', ':'), 'ASC')
             ->limit($this->getResultsLimit())
             ->toArray();
 
-        $savedList = $gridField->getList();
-
-        foreach ($results as $i=>$result) {
-            if ($savedList->find('ID', $result->ID)) {
-                unset($results[$i]);
-            }
-        }
-
-        $json = array();
-
+        $json = [];
         Config::nest();
-
         SSViewer::config()->set('source_file_comments', false);
 
-        $viewer = SSViewer::fromString($this->resultsFormat);
-
+        $engine = Injector::inst()->create(TemplateEngine::class);
         foreach ($results as $result) {
-            $title = Convert::html2raw($viewer->process($result));
-
-            $json[] = array(
+            if (!$result->canView()) {
+                continue;
+            }
+            $title = Convert::html2raw(
+                $engine->renderString($this->resultsFormat, ViewLayerData::create($result), cache: false)
+            );
+            $json[] = [
                 'label' => $title,
                 'value' => $title,
                 'id' => $result->ID,
-            );
+            ];
         }
-
         Config::unnest();
-
-        return HTTPResponse::create()
-            ->setBody(json_encode($json))
-            ->addHeader('Content-Type', 'text/json');
+        $response = new HTTPResponse(json_encode($json));
+        $response->addHeader('Content-Type', 'application/json');
+        return $response;
     }
 }

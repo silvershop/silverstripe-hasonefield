@@ -6,7 +6,6 @@ use SilverStripe\Core\Convert;
 use SilverStripe\Forms\GridField\GridField;
 use SilverStripe\Forms\GridField\GridField_HTMLProvider;
 use SilverStripe\Forms\ReadonlyField;
-use SilverStripe\View\Requirements;
 
 /**
  * Class GridFieldSummaryField

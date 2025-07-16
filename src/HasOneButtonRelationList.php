@@ -2,7 +2,7 @@
 
 namespace SilverShop\HasOneField;
 
-use SilverStripe\ORM\ArrayList;
+use SilverStripe\Model\List\ArrayList;
 use SilverStripe\ORM\DataObject;
 
 /**
@@ -40,20 +40,20 @@ class HasOneButtonRelationList extends ArrayList
         parent::__construct([$record]);
     }
 
-    public function add($item)
+    public function add(mixed $item): void
     {
         $parent = $this->parent;
         // Get the relationship type (has_one or belongs_to)
         $relationType = $parent->getRelationType($this->relationName);
         switch ($relationType) {
             // If belongs_to, retrieve and write to the has_one side of the relationship
-            case 'belongs_to': 
+            case 'belongs_to':
                 $parent->{$this->relationName} = $item;
                 $hasOneRecord = $parent->getComponent($this->relationName);
                 $hasOneRecord->write();
                 break;
             // Otherwise assume has_one, and write to this record
-            default: 
+            default:
                 $parent->{$this->relationName} = $item;
                 $parent->write();
                 break;
@@ -62,7 +62,7 @@ class HasOneButtonRelationList extends ArrayList
         $this->items = [$item];
     }
 
-    public function remove($item)
+    public function remove(mixed $item)
     {
         $parent = $this->parent;
         $relationName = $this->relationName;
@@ -73,7 +73,7 @@ class HasOneButtonRelationList extends ArrayList
             case 'belongs_to':
                 $hasOneRecord = $parent->getComponent($this->relationName);
                 $parentClass = $parent->getClassName();
-                
+
                 $schema = $parentClass::getSchema();
                 $hasOneFieldName = $schema->getRemoteJoinField(
                     $parentClass,
@@ -81,7 +81,7 @@ class HasOneButtonRelationList extends ArrayList
                     $relationType,
                     $polymorphic
                 );
-                
+
                 $hasOneRecord->{$hasOneFieldName} = null;
                 $hasOneRecord->write();
                 break;

@@ -3,10 +3,9 @@
 namespace SilverShop\HasOneField;
 
 use SilverStripe\Control\Controller;
-use SilverStripe\Forms\GridField\GridField;
 use SilverStripe\Forms\GridField\GridField_HTMLProvider;
 use SilverStripe\Forms\GridField\GridFieldAddNewButton;
-use SilverStripe\View\ArrayData;
+use SilverStripe\Model\ArrayData;
 use SilverStripe\View\SSViewer;
 
 /**

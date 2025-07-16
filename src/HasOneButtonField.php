@@ -6,9 +6,7 @@ use SilverStripe\ORM\DataObject;
 use SilverStripe\View\Requirements;
 use SilverStripe\Forms\GridField\GridField;
 use SilverStripe\Forms\GridField\GridFieldConfig;
-use SilverShop\HasOneField\GridFieldHasOneButtonRow;
 use SilverStripe\Forms\GridField\GridFieldDetailForm;
-use SilverStripe\Forms\GridField\GridFieldAddExistingAutocompleter;
 
 /**
  * Class HasOneButtonField
