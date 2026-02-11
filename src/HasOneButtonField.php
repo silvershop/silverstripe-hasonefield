@@ -36,6 +36,18 @@ class HasOneButtonField extends GridField
     protected $relation;
 
     /**
+     * Default globally configured readonly components.
+     *
+     * @see $readonlyComponents
+     * @var array
+     */
+    private static $default_readonly_components = [
+        GridFieldHasOneButtonRow::class,
+        GridFieldSummaryField::class,
+        GridFieldDetailForm::class,
+    ];
+
+    /**
      * HasOneButtonField constructor.
      * @param \SilverStripe\ORM\DataObject $parent
      * @param string $relationName
@@ -140,5 +152,31 @@ class HasOneButtonField extends GridField
         Requirements::javascript("silvershop/silverstripe-hasonefield:client/dist/js/bundle.js");
 
         return parent::FieldHolder($properties);
+    }
+
+    /**
+     * Custom Readonly transformation to add a view button
+     *
+     * @return HasOneButtonField
+     */
+    public function performReadonlyTransformation()
+    {
+        $copy = parent::performReadonlyTransformation();
+        $copyConfig = $copy->getConfig();
+
+        // If the no view button is present, add one
+        if (!$copyConfig->getComponentByType(GridFieldHasOneViewButton::class)) {
+            $record = $this->getRecord();
+            if (is_a($record, DataObject::class) && $record->getRequireSudoMode()) {
+                $viewButton = GridFieldHasOneViewButton::create('buttons-before-right', true);
+            } else {
+                $viewButton = GridFieldHasOneViewButton::create('buttons-before-right');
+            }
+            $copyConfig->addComponent($viewButton);
+        }
+
+        $copy->extend('afterPerformReadonlyTransformation', $this);
+
+        return $copy;
     }
 }
