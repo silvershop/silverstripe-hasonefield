@@ -1,3 +1,6 @@
+.hasonebutton {
+  display: grid;
+}
 .hasonebutton .gridfield-summary-field {
     padding-bottom: 0;
 }
@@ -5,5 +8,9 @@
     border: none;
 }
 .hasonebutton table.grid-field__table {
-    display: none;
+  display: block;
+  order: -1;
+}
+.hasonebutton tbody.ss-gridfield-items {
+  display: none;
 }
