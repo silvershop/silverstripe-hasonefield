@@ -117,6 +117,14 @@ class GridFieldHasOneUnlinkButton implements GridField_HTMLProvider, GridField_A
         $item = $gridField->getList()->byID($record->ID);
         if ($item === null) return;
 
+        // unlinking writes to the parent record, so the user must be able to edit it
+        $parent = $this->getParent();
+        if ($parent instanceof DataObject && !$parent->canEdit()) {
+            throw new ValidationException(
+                _t(__CLASS__ . '.EditPermissionsFailure', "No permission to unlink record")
+            );
+        }
+
         if (!$item->canEdit()) {
             throw new ValidationException(
                 _t(__CLASS__ . '.EditPermissionsFailure', "No permission to unlink record")

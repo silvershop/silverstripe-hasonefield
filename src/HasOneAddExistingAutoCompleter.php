@@ -55,8 +55,11 @@ class HasOneAddExistingAutoCompleter extends GridFieldAddExistingAutocompleter
                 return;
             }
             $relation = $gridField->getRelation() . "ID";
-            $item = DataObject::get($gridField->getModelClass())
-                ->byID($data['relationID']);
+            $relationID = (int) $data['relationID'];
+
+            // restrict to the same list the search offers, so a posted ID can't reach other records
+            $list = $this->searchList ?: DataList::create($gridField->getModelClass());
+            $item = $list->byID($relationID);
 
             if (empty($parent)) {
                 throw new ValidationException(
@@ -64,17 +67,23 @@ class HasOneAddExistingAutoCompleter extends GridFieldAddExistingAutocompleter
                 );
             }
 
-            if (empty($item)) {
+            if (!$parent->canEdit()) {
+                throw new ValidationException(
+                    _t(__CLASS__ . '.EditPermissionsFailure', "No permission to edit record")
+                );
+            }
+
+            if (empty($item) || !$item->canView()) {
                 throw new ValidationException(
                     _t(__CLASS__ . '.ItemNotFound', "Related record not found")
                 );
             }
 
             // Save this relation to the DB
-            $parent->{$relation} = $data['relationID'];
+            $parent->{$relation} = $relationID;
             $parent->write();
 
-            $gridField->State->GridFieldAddRelation = $data['relationID'];
+            $gridField->State->GridFieldAddRelation = $relationID;
             $gridField->getList()->add($item);
 
             Controller::curr()->getResponse()->setStatusCode(
