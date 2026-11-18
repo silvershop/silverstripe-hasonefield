@@ -9,3 +9,6 @@ jobs:
   ci:
     name: CI
     uses: silverstripe/gha-ci/.github/workflows/ci.yml@v3
+    with:
+      # client/ is still built with Yarn 1 and webpack, and gha-ci v3's JS job requires Yarn 4
+      js: false
