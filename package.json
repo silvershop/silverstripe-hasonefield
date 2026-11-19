@@ -1,27 +1,51 @@
 {
   "name": "silverstripe-hasonefield",
-  "version": "1.1.0",
-  "description": "HasOneField for SilverStripe",
-  "main": "./client/src/boot/index.js",
+  "description": "HasOneField for Silverstripe CMS",
   "license": "BSD-3-Clause",
-  "author": "SilverShop.",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/silvershop/silverstripe-hasonefield.git"
+  },
+  "homepage": "https://github.com/silvershop/silverstripe-hasonefield",
+  "bugs": {
+    "url": "https://github.com/silvershop/silverstripe-hasonefield/issues"
+  },
+  "author": "SilverShop",
   "engines": {
-    "node": ">=6.x"
+    "node": "^18.x"
   },
   "scripts": {
-    "build": "yarn && yarn test && NODE_ENV=production webpack -p --bail --progress",
+    "build": "yarn && yarn lint && yarn test && rm -rf client/dist && NODE_ENV=production webpack --mode production --bail --progress",
     "dev": "NODE_ENV=development webpack --progress",
     "watch": "NODE_ENV=development webpack --watch --progress",
-    "css": "WEBPACK_CHILD=css npm run build",
+    "css": "WEBPACK_CHILD=css yarn build",
     "test": "jest",
     "coverage": "jest --coverage",
-    "lock": "npm-shrinkwrap --dev",
-    "lint": "eslint client/src && sass-lint client/src",
+    "lint": "yarn lint-js && yarn lint-sass",
     "lint-js": "eslint client/src",
     "lint-js-fix": "eslint client/src --fix",
-    "lint-sass": "sass-lint client/src"
+    "lint-sass": "stylelint client/src"
   },
+  "packageManager": "yarn@4.18.0+sha512.fcb8716fe7cd0eece141ffc18b92193a9df9204c1ba83189c288835223fc0bbe64af473bab0d5e9927a7daeb5caf2bb07eb2787cc9338ca040ea125f2a1f2f7e",
+  "dependencies": {
+    "jquery": "^3.6.1"
+  },
+  "devDependencies": {
+    "@silverstripe/eslint-config": "^2",
+    "@silverstripe/webpack-config": "^3",
+    "babel-jest": "^29.2.2",
+    "eslint": "^8.26.0",
+    "jest-cli": "^29.2.2",
+    "jest-environment-jsdom": "^29.3.1",
+    "stylelint": "~16.12.0",
+    "webpack": "^5.74.0",
+    "webpack-cli": "^5.0.0"
+  },
+  "browserslist": [
+    "defaults"
+  ],
   "jest": {
+    "testEnvironment": "jsdom",
     "roots": [
       "client/src"
     ],
@@ -38,36 +62,5 @@
     "transform": {
       ".*": "babel-jest"
     }
-  },
-  "babel": {
-    "presets": [
-      "env",
-      "react"
-    ],
-    "plugins": [
-      "transform-object-rest-spread"
-    ]
-  },
-  "devDependencies": {
-    "@silverstripe/eslint-config": "^0.0.4",
-    "@silverstripe/webpack-config": "^0.8.0",
-    "babel-jest": "^20.0.3",
-    "copy-webpack-plugin": "^4.2.0",
-    "enzyme": "^3.3.0",
-    "enzyme-adapter-react-15.4": "^1.0.5",
-    "html-loader": "^0.5.1",
-    "jest-cli": "^19.0.2",
-    "webpack": "^2"
-  },
-  "dependencies": {
-    "babel-polyfill": "6.7.4",
-    "classnames": "^2.2.5",
-    "isomorphic-fetch": "https://registry.npmjs.org/isomorphic-fetch/-/isomorphic-fetch-2.2.1.tgz",
-    "jquery": "^3.5.0",
-    "lodash.debounce": "^4.0.8",
-    "react": "15.3.1",
-    "react-dom": "15.3.1",
-    "react-select": "^1.0.0-rc.5",
-    "url": "^0.11.0"
   }
 }

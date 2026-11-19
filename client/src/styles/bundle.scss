@@ -1,16 +1,22 @@
 .hasonebutton {
   display: grid;
-}
-.hasonebutton .gridfield-summary-field {
+
+  .gridfield-summary-field {
     padding-bottom: 0;
-}
-.hasonebutton .gridfield-summary-field:after {
-    border: none;
-}
-.hasonebutton table.grid-field__table {
-  display: block;
-  order: -1;
-}
-.hasonebutton tbody.ss-gridfield-items {
-  display: none;
+
+    &:after {
+      border: 0;
+    }
+  }
+
+  // Keep the table visible so GridField can render components such as the sudo mode
+  // verification above the button, but hide the record rows
+  table.grid-field__table {
+    display: block;
+    order: -1;
+  }
+
+  tbody.ss-gridfield-items {
+    display: none;
+  }
 }

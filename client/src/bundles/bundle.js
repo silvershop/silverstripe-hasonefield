@@ -1,2 +1,2 @@
-require('legacy/hasonefield.js');
+require('legacy/hasonefield');
 require('boot');
